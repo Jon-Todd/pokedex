@@ -1,14 +1,21 @@
-import { useState } from "react";
+import { PokeAPI } from "pokeapi-types";
+import { FC, useRef, useState } from "react";
 
-export const InspectedPokemon = ({ inspectedPoke }: any) => {
-  const [isOpen, setIsOpen] = useState(false);
+interface InspectedPokemonProps {
+  inspectedPoke: PokeAPI.Pokemon;
+  closeDialog: () => void;
+}
 
-  const { name, sprites, weight, moves } = inspectedPoke;
+type Moves = any;
+
+export const InspectedPokemon:FC<InspectedPokemonProps> = ({ inspectedPoke, closeDialog }) => {
+  const dialogRef = useRef<any>(null);
+  const { name, sprites, weight } = inspectedPoke;
 
   return (
-    <dialog className="inspected-poke">
+    <dialog className="inspected-poke" ref={dialogRef}>
       <svg
-        onClick={() => setIsOpen(false)}
+        onClick={() => closeDialog()}
         className="close-icon"
         xmlns="http://www.w3.org/2000/svg"
         x="0px"
@@ -29,9 +36,6 @@ export const InspectedPokemon = ({ inspectedPoke }: any) => {
         <p>Name: {name}</p>
         <p>Weight: {weight}</p>
       </div>
-      {/* {moves.map((move) => (
-          <p>{move}</p>
-        ))} */}
     </dialog>
   );
 };

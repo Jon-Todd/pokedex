@@ -2,8 +2,9 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { InspectedPokemon } from "./components/InspectedPokemon";
 import "./styles.css";
+import { PokeAPI } from "pokeapi-types";
 
-type Pokemon = any;
+type Pokemon = PokeAPI.NamedAPIResource;
 
 export const fetchData = () => {
   return axios
@@ -31,7 +32,8 @@ export const fetchPokemon = (pokeUrl: string) => {
 
 export default function App() {
   const [pokemon, setPokemon] = useState<Pokemon[]>([]);
-  const [inspectedPoke, setInspectedPoke] = useState<Pokemon>(null);
+  const [inspectedPoke, setInspectedPoke] = useState<PokeAPI.Pokemon>();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
     fetchData().then((resPokemon) => {
@@ -40,21 +42,21 @@ export default function App() {
   }, []);
 
   const clickedPokemon = (clickedPokemon: string) => {
-    fetchPokemon(clickedPokemon).then((resPoke) => {
-      console.log(resPoke);
+    fetchPokemon(clickedPokemon).then((resPoke: PokeAPI.Pokemon) => {
       setInspectedPoke(resPoke);
+      setIsDialogOpen(true);
     });
   };
 
   return (
     <>
-      <div className="pokemon-list">
+      <div className="pokemon-list flex flex-col">
         {pokemon.map((poke, pokeIdx) => (
-          <button key={pokeIdx} onClick={() => clickedPokemon(poke.url)}>
+          <button className="p-2 border border-gray-100  hover:bg-gray-50 text-left capitalize" key={pokeIdx} onClick={() => clickedPokemon(poke.url)}>
             {poke.name}
           </button>
         ))}
-        {inspectedPoke && <InspectedPokemon inspectedPoke={inspectedPoke} />}
+        {isDialogOpen && inspectedPoke && <InspectedPokemon inspectedPoke={inspectedPoke} closeDialog={() => setIsDialogOpen(false)} />}
       </div>
     </>
   );
