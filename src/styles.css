@@ -1,0 +1,31 @@
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}
+
+.pokemon-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 200px;
+}
+
+.inspected-poke {
+  position: fixed;
+  top: 10px;
+  padding: 8px;
+  display: flex;
+}
+
+.close-icon {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+}
+
+.close-icon:hover {
+  background-color: grey;
+}
